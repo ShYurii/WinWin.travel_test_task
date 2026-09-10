@@ -2,6 +2,7 @@ package auth_api.controller;
 
 
 import auth_api.dto.LoginRequest;
+import auth_api.dto.LoginResponse;
 import auth_api.dto.RegisterRequest;
 import auth_api.entity.User;
 import auth_api.service.AuthService;
@@ -33,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public User login(@RequestBody LoginRequest request) {
+    public LoginResponse login(@RequestBody LoginRequest request) {
         return authService.login(
                 request.email(),
                 request.password()

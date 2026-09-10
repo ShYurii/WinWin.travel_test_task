@@ -1,6 +1,7 @@
 package auth_api.service;
 
 
+import auth_api.dto.LoginResponse;
 import auth_api.entity.User;
 import auth_api.exception.UserAlreadyExistsException;
 import auth_api.repository.UserRepository;
@@ -12,11 +13,14 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public AuthService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public User register(String email, String password) {
@@ -33,7 +37,7 @@ public class AuthService {
         return userRepository.save(user);
     }
 
-    public User login(String email, String password) {
+    public LoginResponse login(String email, String password) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
@@ -42,6 +46,8 @@ public class AuthService {
             throw new RuntimeException("Invalid email or password");
         }
 
-        return user;
+        String token = jwtService.generateToken(user.getEmail());
+
+        return new LoginResponse(token);
     }
 }
