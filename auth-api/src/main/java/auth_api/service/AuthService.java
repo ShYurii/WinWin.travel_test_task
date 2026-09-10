@@ -21,10 +21,6 @@ public class AuthService {
 
     public User register(String email, String password) {
 
-//        if (userRepository.findByEmail(email).isPresent()) {
-//            throw new IllegalArgumentException("User with this email already exists");
-//        }
-
         userRepository.findByEmail(email)
                 .ifPresent(user -> {
                     throw new UserAlreadyExistsException("User with this email already exists");
@@ -35,5 +31,17 @@ public class AuthService {
         User user = new User(email, passwordHash);
 
         return userRepository.save(user);
+    }
+
+    public User login(String email, String password) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(password, user.getPasswordHash())) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
+        return user;
     }
 }
