@@ -18,4 +18,12 @@ public class GlobalExceptionHandler {
 
         return Map.of("message", exception.getMessage());
     }
+
+    @ExceptionHandler(DataApiException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public Map<String, String> handleDataApiException(
+            DataApiException exception) {
+
+        return Map.of("message", exception.getMessage());
+    }
 }
