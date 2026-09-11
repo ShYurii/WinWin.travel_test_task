@@ -9,3 +9,28 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
+
+  auth-api:
+    build:
+      context: ./auth-api
+    container_name: winwin-auth-api
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/winwin_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      JWT_SECRET: very-long-secret-key-for-local-development-only
+      INTERNAL_TOKEN: my-secret
+      DATA_API_URL: http://data-api:8081
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+  data-api:
+    build:
+      context: ./data-api
+    container_name: winwin-data-api
+    environment:
+      INTERNAL_TOKEN: my-secret
+    ports:
+      - "8081:8081"
