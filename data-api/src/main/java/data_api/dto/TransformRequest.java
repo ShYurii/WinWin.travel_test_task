@@ -1,4 +1,9 @@
 package data_api.dto;
 
-public record TransformRequest(String text) {
+import jakarta.validation.constraints.NotBlank;
+
+public record TransformRequest(
+
+        @NotBlank
+        String text) {
 }

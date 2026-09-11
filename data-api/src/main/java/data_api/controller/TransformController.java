@@ -2,6 +2,7 @@ package data_api.controller;
 
 import data_api.dto.TransformRequest;
 import data_api.dto.TransformResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 
@@ -22,7 +23,7 @@ public class TransformController {
     @PostMapping("/transform")
     public TransformResponse transform(
             @RequestHeader(value = "X-Internal-Token", required = false) String token,
-            @RequestBody TransformRequest request) {
+            @Valid @RequestBody TransformRequest request) {
 
         if (!internalToken.equals(token)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
