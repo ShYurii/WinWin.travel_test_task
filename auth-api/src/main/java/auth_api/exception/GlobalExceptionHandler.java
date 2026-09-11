@@ -33,6 +33,11 @@ public class GlobalExceptionHandler {
     public Map<String, String> handleValidationException(
             MethodArgumentNotValidException exception) {
 
-        return Map.of("message", "Text must not be blank");
+        String message = exception.getBindingResult()
+                .getFieldErrors()
+                .get(0)
+                .getDefaultMessage();
+
+        return Map.of("message", message);
     }
 }
