@@ -7,6 +7,7 @@ import auth_api.entity.ProcessingLog;
 import auth_api.entity.User;
 import auth_api.repository.ProcessingLogRepository;
 import auth_api.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,17 +32,12 @@ public class ProcessController {
     }
 
     @PostMapping("/process")
-    public TransformResponse process(@RequestBody ProcessRequest request,
+    public TransformResponse process(@Valid @RequestBody ProcessRequest request,
                                      Authentication authentication) {
 
         String email = authentication.getName();
         User user = authService.findByEmail(email);
         UUID userId = user.getId();
-
-//        System.out.println("CURRENT USER: " + email);
-//        System.out.println("USER ID: " + userId);
-
-//        return dataApiClient.transform(request);
 
         TransformResponse response = dataApiClient.transform(request);
 
