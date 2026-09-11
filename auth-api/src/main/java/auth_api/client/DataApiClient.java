@@ -13,17 +13,21 @@ public class DataApiClient {
 
     private final RestClient restClient;
     private final String internalToken;
+    private final String dataApiUrl;
 
     public DataApiClient(RestClient restClient,
-                         @Value("${internal.token}") String internalToken) {
+                         @Value("${internal.token}") String internalToken,
+                         @Value("${data.api.url}") String dataApiUrl) {
+
         this.internalToken = internalToken;
         this.restClient = restClient;
+        this.dataApiUrl = dataApiUrl;
     }
 
     public TransformResponse transform(ProcessRequest request) {
         try {
             return restClient.post()
-                    .uri("http://localhost:8081/api/transform")
+                    .uri(dataApiUrl + "/api/transform")
                     .header("X-Internal-Token", internalToken)
                     .body(request)
                     .retrieve()
