@@ -7,6 +7,7 @@ import auth_api.entity.ProcessingLog;
 import auth_api.entity.User;
 import auth_api.repository.ProcessingLogRepository;
 import auth_api.service.AuthService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,7 @@ public class ProcessController {
         this.processingLogRepository = processingLogRepository;
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/process")
     public TransformResponse process(@Valid @RequestBody ProcessRequest request,
                                      Authentication authentication) {
