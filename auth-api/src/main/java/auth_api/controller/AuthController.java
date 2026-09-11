@@ -4,6 +4,7 @@ package auth_api.controller;
 import auth_api.dto.LoginRequest;
 import auth_api.dto.LoginResponse;
 import auth_api.dto.RegisterRequest;
+import auth_api.dto.RegisterResponse;
 import auth_api.entity.User;
 import auth_api.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public User register(@RequestBody RegisterRequest request) {
+    public RegisterResponse register(@RequestBody RegisterRequest request) {
         return authService.register(
                 request.email(),
                 request.password()

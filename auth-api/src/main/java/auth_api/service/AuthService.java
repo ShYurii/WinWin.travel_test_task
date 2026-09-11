@@ -2,6 +2,7 @@ package auth_api.service;
 
 
 import auth_api.dto.LoginResponse;
+import auth_api.dto.RegisterResponse;
 import auth_api.entity.User;
 import auth_api.exception.UserAlreadyExistsException;
 import auth_api.repository.UserRepository;
@@ -23,7 +24,7 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public User register(String email, String password) {
+    public RegisterResponse register(String email, String password) {
 
         userRepository.findByEmail(email)
                 .ifPresent(user -> {
@@ -33,8 +34,12 @@ public class AuthService {
         String passwordHash = passwordEncoder.encode(password);
 
         User user = new User(email, passwordHash);
+        User savedUser = userRepository.save(user);
 
-        return userRepository.save(user);
+        return new RegisterResponse(
+                savedUser.getId(),
+                savedUser.getEmail()
+        );
     }
 
     public LoginResponse login(String email, String password) {
