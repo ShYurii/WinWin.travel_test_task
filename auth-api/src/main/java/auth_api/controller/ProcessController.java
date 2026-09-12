@@ -10,6 +10,7 @@ import auth_api.service.AuthService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,9 +36,9 @@ public class ProcessController {
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/process")
     public TransformResponse process(@Valid @RequestBody ProcessRequest request,
-                                     Authentication authentication) {
+                                     @AuthenticationPrincipal String email) {
 
-        String email = authentication.getName();
+//        String email = authentication.getName();
         User user = authService.findByEmail(email);
         UUID userId = user.getId();
 

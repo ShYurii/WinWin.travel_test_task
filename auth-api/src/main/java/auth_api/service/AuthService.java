@@ -4,6 +4,7 @@ package auth_api.service;
 import auth_api.dto.LoginResponse;
 import auth_api.dto.RegisterResponse;
 import auth_api.entity.User;
+import auth_api.exception.InvalidCredentialsException;
 import auth_api.exception.UserAlreadyExistsException;
 import auth_api.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,10 +46,10 @@ public class AuthService {
     public LoginResponse login(String email, String password) {
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
 
         if (!passwordEncoder.matches(password, user.getPasswordHash())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
 
         String token = jwtService.generateToken(user.getEmail());
